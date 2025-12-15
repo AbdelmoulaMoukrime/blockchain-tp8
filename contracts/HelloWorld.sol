@@ -1,10 +1,11 @@
-pragma solidity ^0.5.9;
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.21;
 
 contract HelloWorld {
 
     string public yourName;
 
-    constructor() public {
+    constructor() {
         yourName = "Unknown";
     }
 
