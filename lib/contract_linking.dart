@@ -7,8 +7,9 @@ import 'package:flutter/services.dart';
 
 class ContractLinking extends ChangeNotifier {
   final String _rpcUrl = "http://10.0.2.2:7545";
-  final String _wsUrl  = "ws://10.0.2.2:7545/";
-  final String _privateKey = "29ec0e1b29ea57edd9ce410b521af58dc3d2298d07c094d72e50d0f0f9189ae2";
+  final String _wsUrl = "ws://10.0.2.2:7545/";
+  final String _privateKey =
+      "0x29ec0e1b29ea57edd9ce410b521af58dc3d2298d07c094d72e50d0f0f9189ae2";
 
   late Web3Client _client;
   bool isLoading = true;
@@ -30,8 +31,7 @@ class ContractLinking extends ChangeNotifier {
     _client = Web3Client(
       _rpcUrl,
       Client(),
-      socketConnector: () =>
-          IOWebSocketChannel.connect(_wsUrl).cast<String>(),
+      socketConnector: () => IOWebSocketChannel.connect(_wsUrl).cast<String>(),
     );
     await getAbi();
     await getCredentials();
@@ -39,13 +39,15 @@ class ContractLinking extends ChangeNotifier {
   }
 
   Future<void> getAbi() async {
-    final abiString =
-        await rootBundle.loadString("src/artifacts/HelloWorld.json");
+    final abiString = await rootBundle.loadString(
+      "src/artifacts/HelloWorld.json",
+    );
     final jsonAbi = jsonDecode(abiString);
 
     _abiCode = jsonEncode(jsonAbi["abi"]);
-    _contractAddress =
-        EthereumAddress.fromHex(jsonAbi["networks"]["5777"]["address"]);
+    _contractAddress = EthereumAddress.fromHex(
+      jsonAbi["networks"]["5777"]["address"],
+    );
   }
 
   Future<void> getCredentials() async {
@@ -59,7 +61,7 @@ class ContractLinking extends ChangeNotifier {
     );
 
     _yourName = _contract.function("yourName");
-    _setName  = _contract.function("setName");
+    _setName = _contract.function("setName");
 
     await getName();
   }
@@ -76,7 +78,6 @@ class ContractLinking extends ChangeNotifier {
     notifyListeners();
   }
 
-  
   Future<void> setName(String name) async {
     isLoading = true;
     notifyListeners();
@@ -90,9 +91,9 @@ class ContractLinking extends ChangeNotifier {
         function: _setName,
         parameters: [name],
         maxGas: 100000,
-        gasPrice: gasPrice, 
+        gasPrice: gasPrice,
       ),
-      chainId: 5777, 
+      chainId: 5777,
     );
 
     await getName();
