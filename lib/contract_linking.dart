@@ -6,7 +6,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:flutter/services.dart';
 
 class ContractLinking extends ChangeNotifier {
-  final String _rpcUrl = "http://10.0.2.2:7545"; // Android Emulator
+  final String _rpcUrl = "http://10.0.2.2:7545";
   final String _wsUrl  = "ws://10.0.2.2:7545/";
   final String _privateKey = "29ec0e1b29ea57edd9ce410b521af58dc3d2298d07c094d72e50d0f0f9189ae2";
 
@@ -76,12 +76,11 @@ class ContractLinking extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ⭐⭐⭐ التعديل الحاسم هنا ⭐⭐⭐
+  
   Future<void> setName(String name) async {
     isLoading = true;
     notifyListeners();
 
-    // Legacy tx متوافق مع Ganache
     final gasPrice = await _client.getGasPrice();
 
     await _client.sendTransaction(
@@ -91,9 +90,9 @@ class ContractLinking extends ChangeNotifier {
         function: _setName,
         parameters: [name],
         maxGas: 100000,
-        gasPrice: gasPrice, // مهم بزاف
+        gasPrice: gasPrice, 
       ),
-      chainId: 5777, // NETWORK ID ديال Ganache
+      chainId: 5777, 
     );
 
     await getName();
